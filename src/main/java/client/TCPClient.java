@@ -11,6 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
+import server.Drone;
 
 /**
  *
@@ -35,9 +37,23 @@ public class TCPClient {
 			out = new ObjectOutputStream(s.getOutputStream());
                         //create Input Stream using the Socket 's' specific input stream - allows data to be recieved through the specified port
 			in = new ObjectInputStream(s.getInputStream());
+                        
+                        //initialize drone object and ask user for id, name, x and y
+                        Drone drone = new Drone();
+                        Scanner sc = new Scanner(System.in);
+                        System.out.println("Enter Drone ID: ");
+                        drone.setDroneID(sc.nextInt());
+                        System.out.println("Enter Drone Name: ");
+                        drone.setDroneName(sc.nextLine());
+                        System.out.println("Enter Drone X starting position: ");
+                        drone.position.setX(sc.nextInt());
+                        System.out.println("Enter Drone y starting position: ");
+                        drone.position.setY(sc.nextInt());
+                        
+                        //send server the drone object created/updated by the user
+                        out.writeObject(drone);
+                        
 
-                       //TODO: add in gui and gui logic
-		 
                 //catch exceptions
 		}catch (UnknownHostException e){System.out.println("Socket:"+e.getMessage());
 		}catch (EOFException e){System.out.println("EOF:"+e.getMessage());
