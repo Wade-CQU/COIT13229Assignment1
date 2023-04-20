@@ -14,18 +14,16 @@ import java.io.Serializable;
 public class Drone implements Serializable {
     public int droneID;
     public String droneName;
-    public Position position;
-    public FireDetection fireDetection;
-    
+    public Position position = new Position();
+      
 
     public Drone() {
     }
 
-    public Drone(int droneID, String droneName, Position position, FireDetection fireDetection) {
+    public Drone(int droneID, String droneName, Position position) {
         this.droneID = droneID;
         this.droneName = droneName;
         this.position = position;
-        this.fireDetection = fireDetection;
     }
 
     public int getDroneID() {
@@ -53,15 +51,6 @@ public class Drone implements Serializable {
     public void setPosition(Position position) {
         this.position = position;
     }
-
-    public FireDetection getFireDetection() {
-        return fireDetection;
-    }
-
-    public void setFireDetection(FireDetection fireDetection) {
-        this.fireDetection = fireDetection;
-    }
-    
     
 }
 

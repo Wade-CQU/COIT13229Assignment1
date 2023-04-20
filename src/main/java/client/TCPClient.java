@@ -11,8 +11,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Random;
 import java.util.Scanner;
 import server.Drone;
+import server.FireDetection;
+import server.Position;
 
 /**
  *
@@ -23,10 +26,14 @@ public class TCPClient {
 		
                 //initialize Socket object as 's'
 		Socket s = null;
+                
 		
 		try{
+                        //Create random number generator object
+                        Random numberGenerator = new Random();
+                        
 			//set port as serverPort variable and create Socket object using that port
-			int serverPort = 8888;
+			int serverPort = 8887;
 			s = new Socket("localhost", serverPort);   
                         
                         //initialize ObjectInputStream and ObjectOutputStream objects
@@ -40,9 +47,11 @@ public class TCPClient {
                         
                         //initialize drone object and ask user for id, name, x and y
                         Drone drone = new Drone();
+                        FireDetection fireDetection = new FireDetection();
                         Scanner sc = new Scanner(System.in);
                         System.out.println("Enter Drone ID: ");
                         drone.setDroneID(sc.nextInt());
+                        sc.nextLine();
                         System.out.println("Enter Drone Name: ");
                         drone.setDroneName(sc.nextLine());
                         System.out.println("Enter Drone X starting position: ");
@@ -52,6 +61,52 @@ public class TCPClient {
                         
                         //send server the drone object created/updated by the user
                         out.writeObject(drone);
+                        
+                        while (true){
+                            try{
+                                //Delay process by 10 seconds
+                                Thread.sleep(10000);
+                                
+                                //set the max distance a drone can move in 10 seconds
+                                int numGeneratorBound = 20;
+                                /* used to subtract the random number generation to allow the possibility of the drone x/y movment to be less than current value
+                                this prevents the drone from only moving up and to the right of the map */
+                                int numOffset = 10;
+                                //generate new X position that is +/- 0-10 of last x position
+                                int randomX = drone.position.getX() - numOffset + numberGenerator.nextInt(numGeneratorBound);
+                                //generate new Y position that is +/- 0-10 of last y position
+                                int randomY = drone.position.getY() - numOffset + numberGenerator.nextInt(numGeneratorBound);
+                                
+                                //set drone's new randomly generated x and y positions
+                                drone.position.setX(randomX);
+                                drone.position.setY(randomY);
+                                
+                                System.out.println("Drones x&y: " + drone.position.getX() + " " + drone.position.getY());
+                                //Send current drone's position to server
+                                Position newPosition = drone.getPosition();
+                                out.writeObject(newPosition);
+                                
+                                //generate random number between 0-20
+                                int fireProbabilty = numberGenerator.nextInt(numGeneratorBound);
+                                int fireSeverityBound = 10;
+                                
+                                //if number is less than 5, create fire detection object and send to server.
+                                if(fireProbabilty < 5){
+                                    System.out.println("Fireobject detected and sent to server");
+                                    fireDetection.setFirePositionx(drone.position.getX());
+                                    fireDetection.setFirePositiony(drone.position.getY());
+                                    //randomly generate a fire serverity level between 0-10
+                                    fireDetection.setFireSeverity(numberGenerator.nextInt(fireSeverityBound));
+                                    //send fire detection object to server
+                                    out.writeObject(fireDetection);
+                                }
+                            }
+                            catch (InterruptedException ie){
+                                ie.printStackTrace();
+                            }
+                        }
+                        
+                        
                         
 
                 //catch exceptions

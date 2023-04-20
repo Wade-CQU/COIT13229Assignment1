@@ -5,11 +5,13 @@
  */
 package server;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Wade
  */
-public class FireDetection {
+public class FireDetection implements Serializable {
     public int fireID;
     public int FirePositionx;
     public int FirePositiony;
