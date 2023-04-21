@@ -12,12 +12,14 @@ import java.io.Serializable;
  * @author Wade
  */
 public class FireDetection implements Serializable {
+    //parameters
     public int fireID;
     public int FirePositionx;
     public int FirePositiony;
     public int reportingDroneID;
     public int fireSeverity;
 
+    //constructors
     public FireDetection() {
     }
 
@@ -29,6 +31,7 @@ public class FireDetection implements Serializable {
         this.fireSeverity = fireSeverity;
     }
 
+    //setters and getters
     public int getFireID() {
         return fireID;
     }

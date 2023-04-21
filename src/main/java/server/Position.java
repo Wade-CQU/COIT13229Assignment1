@@ -12,9 +12,11 @@ import java.io.Serializable;
  * @author Wade
  */
 public class Position implements Serializable{
+    //parameters
     private int x;
     private int y;
 
+    //constructors
     public Position(){
     }
     
@@ -23,6 +25,7 @@ public class Position implements Serializable{
         this.y = y;
     }
 
+    //setters and getters
     public int getX() {
         return x;
     }

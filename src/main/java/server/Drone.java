@@ -12,11 +12,12 @@ import java.io.Serializable;
  * @author Wade
  */
 public class Drone implements Serializable {
+    //parameters
     public int droneID;
     public String droneName;
     public Position position = new Position();
-      
-
+    
+    //constructors
     public Drone() {
     }
 
@@ -26,6 +27,7 @@ public class Drone implements Serializable {
         this.position = position;
     }
 
+    //setters and getters
     public int getDroneID() {
         return droneID;
     }
@@ -41,8 +43,6 @@ public class Drone implements Serializable {
     public void setDroneName(String droneName) {
         this.droneName = droneName;
     }
-
-    
 
     public Position getPosition() {
         return position;
